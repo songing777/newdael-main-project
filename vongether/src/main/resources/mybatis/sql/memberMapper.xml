@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.vongether.member.dao.MemberDAO">
+    <resultMap id="memberResultMap" type="MemberVO">
+      <id property="mId" column="m_id" />
+      <result property="mName" column="m_name"/>
+      <result property="mGender" column="m_gender"/>
+      <result property="mBirth" column="m_birth"/>
+      <result property="mPwd" column="m_pwd"/>
+      <result property="mPostcode" column="m_postcode"/>
+      <result property="mAddr1" column="m_addr1"/>
+      <result property="mAddr2" column="m_addr2"/>
+      <result property="mRole" column="m_role"/>
+    </resultMap>
+    
+    <resultMap id="VolunteerAppResultMap" type="com.vongether.volunteer.model.VolunteerAppVo">
+      <id property="appNo" column="app_no" />
+      <result property="appName" column="app_name"/>
+      <result property="appPlace" column="app_place"/>
+      <result property="appBegintm" column="app_begintm"/>
+      <result property="appEndtm" column="app_endtm"/>
+      <result property="mId" column="m_id"/>
+    </resultMap>
+    
+    <resultMap id="boardResultMap" type="com.vongether.board.model.BoardVO">
+      <id property="bNo" column="b_no" />
+      <result property="bTitle" column="b_title"/>
+      <result property="bContent" column="b_content"/>
+      <result property="bHitcount" column="b_hitcount"/>
+      <result property="bRegdate" column="b_regdate"/>
+      <result property="bDelYN" column="b_delYN"/>
+      <result property="mId" column="m_id"/>
+    </resultMap>
+	
+	<select id="selectOneVList" parameterType="String" resultMap="VolunteerAppResultMap">
+        select app_no, app_name, app_place, app_begintm, app_endtm
+        from volunteer_appl
+        where m_id = #{mId}
+    </select>
+	
+	<insert id="insert">
+		insert into member
+		( m_id, m_name, m_gender, m_birth, m_pwd, m_postcode, m_addr1, m_addr2, m_role )
+		values( #{mId}, #{mName}, #{mGender}, #{mBirth}, #{mPwd}, #{mPostcode}, #{mAddr1}, #{mAddr2}, #{mRole})
+	</insert>
+
+    <update id="createAuthKey">
+        update member set m_authCode = #{mAuthCode} where m_id = #{mId}
+    </update>
+
+    <update id="userAuth">
+        update member set m_role = "ROLE_USER" where m_id = #{mId}
+    </update>
+
+    <select id="checkId" parameterType="String" resultType="int">
+        select count(*) from member
+        where m_id = #{mId}
+    </select>
+    
+    <select id="selectOne" parameterType="map" resultMap="memberResultMap">
+        select m_id, m_name, m_gender, m_birth, m_postcode, m_addr1, m_addr2, m_role
+        from member
+        where m_id = #{mId} and m_pwd = #{mPwd}
+    </select>
+     
+    <select id="selectOneSearch" parameterType="String" resultMap="memberResultMap">
+        select m_id, m_name, m_gender, m_birth, m_postcode, m_addr1, m_addr2
+        from member
+        where m_id = #{mId}
+    </select>
+    
+    <select id="checkPwd" parameterType="map" resultType="int">
+        select count(*) from member
+        where m_id = #{mId} and m_pwd = #{mPwd}
+    </select>
+
+    <update id="update">
+        update member set
+        m_pwd = #{mPwd}, m_birth = #{mBirth}, m_postcode = #{mPostcode}, m_addr1 = #{mAddr1}, m_addr2 = #{mAddr2}
+        where m_id = #{mId}
+    </update>
+    
+    <select id="findId" parameterType="map" resultType="String">
+        select m_id from member
+        where m_name = #{mName} and m_birth = #{mBirth}
+    </select>
+    
+    <select id="findPwd" parameterType="map" resultType="String">
+        select m_id from member
+        where m_id = #{mId} and m_name = #{mName} and m_birth = #{mBirth}
+    </select>
+    
+    <update id="newPwd">
+        update member set m_pwd = #{mPwd} where m_id = #{mId}
+    </update>
+    
+    <update id="singOut">
+        update member set
+         m_role = "ROLE_SIGNOUT"
+         where m_id =#{mId} and m_pwd = #{mPwd}     
+    </update>
+    
+    <select id="myBoardList" parameterType="String" resultMap="boardResultMap">
+        select b.b_no, b.b_title, b.b_hitcount, DATE_FORMAT(b.b_regdate,'%Y-%m-%d')b_regdate
+         from board b join member m 
+         on b.m_id = m.m_id 
+         where m.m_id = #{mId} and b.b_delYN = false
+         order by b.b_regdate desc 
+    </select>
+
+</mapper>

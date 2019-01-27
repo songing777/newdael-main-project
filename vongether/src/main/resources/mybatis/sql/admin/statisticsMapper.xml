@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.vongether.admin.board.dao.BoardAdminDAO">
+	<!-- 일간 게시글 카운트 정보 : 아이디, 카운트 -->
+	<select id="dayBoardTop3" parameterType="map" resultType="map">
+		SELECT m.m_id, (SELECT COUNT(b.m_id) 
+						FROM board b 
+						WHERE m.m_id = b.m_id 
+						AND b.b_regdate > CURDATE()) counter
+  		FROM member m
+  		WHERE m.m_role != "ROLE_ADMIN"
+		ORDER BY counter desc
+		LIMIT 3 offset 0
+	</select>
+
+	<!-- 일간 댓글 카운트 정보 : 아이디, 카운트 -->
+	<select id="dayReplyTop3" parameterType="map" resultType="map"><!--  resultMap="boardResultMap"> -->
+		SELECT m.m_id, (SELECT COUNT(b.m_id) 
+						FROM reply b 
+						WHERE m.m_id = b.m_id 
+						AND b.r_regdate > CURDATE()) counter
+  		FROM member m
+		WHERE m.m_role != "ROLE_ADMIN"
+		ORDER BY counter desc
+		LIMIT 3 offset 0
+	</select>
+	
+
+	
+	<!-- 주간 게시글 카운트 정보 : 아이디, 카운트 -->
+	<select id="weekBoardTop3" parameterType="map" resultType="map">
+		SELECT m_id, (SELECT COUNT(b.m_id) 
+					  FROM board b 
+					  WHERE b.m_id = m.m_id 
+					  AND b.b_regdate > DATE_FORMAT(DATE_SUB(now(), INTERVAL (DAYOFWEEK(now())-1) DAY), '%Y/%m/%d')) counter
+		FROM member m
+		WHERE m.m_role != "ROLE_ADMIN"
+		ORDER BY counter desc
+		LIMIT 3 OFFSET 0
+	</select>
+	<!-- 주간 댓글 카운트 정보 : 아이디, 카운트 -->
+	<select id="weekReplyTop3" parameterType="map" resultType="map">
+		SELECT m_id, (SELECT COUNT(b.m_id) 
+					  FROM reply b 
+					  WHERE b.m_id = m.m_id 
+					  AND b.r_regdate > DATE_FORMAT(DATE_SUB(now(), INTERVAL (DAYOFWEEK(now())-1) DAY), '%Y/%m/%d')) counter
+		FROM member m
+		WHERE m.m_role != "ROLE_ADMIN"
+		ORDER BY counter desc
+		LIMIT 3 OFFSET 0
+	</select>
+
+	<!-- 월간 댓글 카운트 정보 : 아이디, 카운트 -->
+	<select id="monthReplyTop3" parameterType="map" resultType="map">
+		SELECT m.m_id, (SELECT COUNT(b.m_id)
+						FROM reply b
+						WHERE m.m_id = b.m_id
+						AND MONTH(b.r_regdate) = MONTH(NOW())) counter
+		FROM member m
+		WHERE m.m_role != "ROLE_ADMIN"
+		ORDER BY counter desc
+		LIMIT 3 OFFSET 0
+	</select> 
+	
+	<!-- 월간 게시판 카운트 정보 : 아이디, 카운트 -->
+	<select id="monthBoardTop3" parameterType="map" resultType="map">
+		SELECT m.m_id, (SELECT COUNT(b.m_id)
+						FROM board b
+						WHERE m.m_id = b.m_id
+						AND MONTH(b.b_regdate) = MONTH(NOW())) counter
+		FROM member m
+		WHERE m.m_role != "ROLE_ADMIN"
+		ORDER BY counter desc
+		LIMIT 3 OFFSET 0
+	</select> 
+	
+	<!-- 월간 신청 카운트 정보 : 아이디, 월간게시글 카운트 -->
+	<select id="monthApplTop3" parameterType="map" resultType="map"><!--  resultMap="boardResultMap"> -->
+		SELECT m.m_id, (SELECT COUNT(va.app_no) 
+						 FROM volunteer_appl va 
+						 WHERE va.m_id = m.m_id
+						 AND MONTH(va.app_begintm) = MONTH(NOW())) counter
+		FROM member m
+		WHERE m.m_role != "ROLE_ADMIN"
+		ORDER BY counter desc
+		LIMIT 3 offset 0;
+	</select>
+	
+	<!-- 방문자수 일간 정보 : 카운트 -->
+	<select id="dayVisit" resultType="int">
+		SELECT COUNT(visit_id)
+		FROM visitor_ct
+		WHERE DAY(visit_time) = DAY(NOW())
+	</select> 
+	
+	<!-- 방문자수 월간 정보 : 카운트 -->
+	<select id="monthVisit" resultType="int">
+		SELECT COUNT(visit_id)
+		FROM visitor_ct
+		WHERE MONTH(visit_time) = MONTH(NOW())
+	</select> 
+</mapper>

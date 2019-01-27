@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+
+	<typeAliases>
+		<typeAlias alias="BoardVO" type="com.vongether.board.model.BoardVO"/>
+		<typeAlias alias="ReplyVO" type="com.vongether.board.model.ReplyVO" />
+		<typeAlias alias="MemberVO" type="com.vongether.member.model.MemberVO" />
+		<typeAlias alias="VolunteerVO" type="com.vongether.volunteer.model.VolunteerVO" />
+		<typeAlias alias="VisitCountVO" type="com.vongether.intro.model.VisitCountVO" />
+	</typeAliases>
+
+
+</configuration>

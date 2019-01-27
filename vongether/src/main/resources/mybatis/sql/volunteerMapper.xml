@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vongether.volunteer.dao.VolunteerDAO">
+<!-- 
+	<resultMap id="memberResultMap" type="VolunteerAppVo">
+      <id property="appNo" column="app_no" />
+      <result property="appName" column="app_name"/>
+      <result property="appPlace" column="app_place"/>
+      <result property="appBegintm" column="app_begintm"/>
+      <result property="appEndtm" column="app_endtm"/>
+      <result property="mId" column="m_id"/>
+    </resultMap>
+  -->
+	<insert id="insert">
+		insert into volunteer_appl
+		(app_no, app_name, app_place, app_begintm, app_endtm, m_id)
+		values( #{appNo}, #{appName},#{appPlace},STR_TO_DATE(#{appBegintm}, '%Y-%m-%d %H:%i:%s'),STR_TO_DATE(#{appEndtm}, '%Y-%m-%d %H:%i:%s'), #{mId})
+	</insert>
+	
+	<update id="updateSimple">
+		update volunteer set v_appcount = v_appcount + 1 where v_no = #{progrmRegistNo}
+	</update>
+	<update id="updateStateSimple">
+		update volunteer set v_state = '모집완료' where v_no = #{progrmRegistNo}
+	</update>
+	
+	<select id="selectSimple" resultType="int">
+		select count(*) from volunteer where v_no = #{progrmRegistNo}
+	</select>
+	<select id="selectMaxSimple" resultType="int">
+		select (v_apptotal - v_appcount) from volunteer where v_no = #{progrmRegistNo}
+	</select>
+	
+	<insert id="insertSimple">
+		insert into volunteer (v_no,v_appcount,v_apptotal,v_state) values(#{progrmRegistNo},1,#{rcritNmpr},'모집중')
+	</insert>
+	
+	
+</mapper>

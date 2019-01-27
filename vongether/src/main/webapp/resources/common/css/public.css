@@ -1,0 +1,18 @@
+@charset "UTF-8";
+
+.main-content-box {
+  background-color: #ffffff;
+  border-left: 1px solid black;
+  border-left-color: rgba(0, 0, 0, 0.15);
+  border-right: 1px solid black;
+  border-right-color: rgba(0, 0, 0, 0.15);
+  min-height: 678px;
+}
+
+.my-container {
+  width: 100%;
+  padding-right: 35px;
+  padding-left: 35px;
+  margin-right: auto;
+  margin-left: auto;
+}

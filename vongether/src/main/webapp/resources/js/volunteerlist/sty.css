@@ -1,0 +1,21 @@
+<style>
+#searchSection{
+	padding-bottom: 80px;
+}
+.line {
+	border-bottom: 3px solid black;
+}
+
+.red {
+	color: red;
+}
+
+.blue {
+	color: blue;
+}
+
+.orange {
+	color: orange;
+}
+
+</style>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.vongether.board.dao.ReplyDAO">
+
+	<resultMap id="replyResultMap" type="ReplyVO">
+	  <id property="rNo" column="r_no" />
+	  <result property="mId" column="m_id"/>
+	  <result property="rContent" column="r_content"/>
+	  <result property="rRegdate" column="r_regdate"/>
+	</resultMap>
+	
+	<select id="totalReplyCount" parameterType="map" resultType="int">
+		SELECT COUNT(r_no) rCount
+		FROM reply
+		WHERE b_no = #{bNo}
+	</select>
+	<select id="selectReplyList" parameterType="int" resultMap="replyResultMap">
+		SELECT r_no, m_id, r_content, DATE_FORMAT(r_regdate,'%Y-%m-%d') r_regdate
+		FROM reply 
+		WHERE b_no = #{bNo}
+		ORDER BY r_no desc
+	</select>
+	<insert id="writeReply" parameterType="ReplyVO">
+		INSERT INTO reply (m_id, r_content, b_no)
+		VALUE(#{mId},#{rContent},#{bNo})
+	</insert>
+	<update id="updateReply" parameterType="map">
+		UPDATE reply
+		SET r_content = #{rContent}
+		WHERE r_no=#{rNo}
+	</update>
+	<!-- 
+	
+	
+	<update id="increaseHitcount" parameterType="int">
+		UPDATE board
+		SET b_hitcount = (b_hitcount+1)
+		WHERE b_no = #{bNo}
+	</update>
+	
+ -->	
+	<delete id="deleteReply" parameterType="int">
+		DELETE FROM reply 
+		WHERE r_no = #{rNo};
+	</delete>
+</mapper>

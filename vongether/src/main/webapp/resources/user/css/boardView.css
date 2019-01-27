@@ -1,0 +1,13 @@
+@charset "UTF-8";
+.viewTitle {
+	font-size: 25px;
+	font-weight: bold;
+}
+.articleViewContentBox {
+	min-height: 400px;
+	border: 1px solid;
+}
+.replyRow {
+	padding-bottom: 5px;
+	border-top: 1px solid;
+}

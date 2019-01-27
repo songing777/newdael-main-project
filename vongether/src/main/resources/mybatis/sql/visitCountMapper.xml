@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vongether.intro.dao.IntroDAO">
+
+    <resultMap type="VisitCountVO" id="VisitCountMap">
+        <result column="visit_id" property="visitId"/>    
+        <result column="visit_ip" property="visitIp"/>    
+        <result column="visit_time" property="visitTime"/>    
+    </resultMap>
+    
+	<resultMap id="boardResultMap" type="BoardVO">
+	  <id property="bNo" column="b_no" />
+	  <result property="bTitle" column="b_title"/>
+	  <result property="bContent" column="b_content"/>
+	  <result property="bHitcount" column="b_hitcount"/>
+	  <result property="bRegdate" column="b_regdate"/>
+	  <result property="mId" column="m_id"/>
+	  <result property="rCount" column="r_count"/>
+	</resultMap>
+	
+    <insert id="visitCount" parameterType="VisitCountVO">
+        INSERT
+        INTO visitor_ct
+        (
+            visit_id,
+            visit_ip,
+            visit_time
+        )
+        VALUES
+        (
+            #{visitId},
+            #{visitIp},
+            CURDATE()
+        )
+    </insert>
+    
+    <select id="getNoticeTop3" resultMap="boardResultMap">
+	    select b_no, b_title, b_content
+		from board
+		where b_noticeYN = true
+		order by b_no desc
+		limit 3 offset 0;
+    </select>
+    
+</mapper>

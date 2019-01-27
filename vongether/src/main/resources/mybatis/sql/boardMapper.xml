@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.vongether.board.dao.BoardDAO">
+
+	<resultMap id="boardResultMap" type="BoardVO">
+	  <id property="bNo" column="b_no" />
+	  <result property="bTitle" column="b_title"/>
+	  <result property="bContent" column="b_content"/>
+	  <result property="bHitcount" column="b_hitcount"/>
+	  <result property="bRegdate" column="b_regdate"/>
+	  <result property="mId" column="m_id"/>
+	  <result property="rCount" column="r_count"/>
+	</resultMap>
+	
+	<select id="selectNoticeTop3" parameterType="map" resultMap="boardResultMap">
+		SELECT b.b_no, b.b_title, b.b_hitcount, DATE_FORMAT(b.b_regdate,'%Y-%m-%d') b_regdate, b.m_id, r.r_count
+		FROM board b
+		LEFT JOIN (select r.b_no, count(r.b_no) r_count
+					from reply r
+					GROUP BY b_no) r
+		ON b.b_no = r.b_no
+		WHERE b_delYN = 0
+		AND b_noticeYN = true
+		ORDER BY b.b_no desc
+		LIMIT 3 OFFSET 0;
+	</select> 
+	<select id="totalBoardArticleCount" parameterType="map" resultType="int">
+		SELECT COUNT(b.b_no)
+		FROM board b
+		WHERE b_delYN = 0
+		<if test="word != null and word != ''">
+	        <choose>
+            <when test="key == 'id'">
+			AND b.m_id REGEXP #{word}
+            </when>
+            <when test="key == 'my'">
+			AND b.m_id like #{word}
+            </when>
+            <when test="key == 'title'">
+            AND b.b_title REGEXP #{word}
+            </when>
+            <when test="key == 'content'">
+            AND b.b_content REGEXP #{word}
+            </when>
+            <otherwise>
+            AND b.b_title REGEXP #{word}
+		    OR b.b_content REGEXP #{word}
+            </otherwise> 
+            </choose> 
+		</if> 
+            
+	</select>
+	<select id="selectBoardList" parameterType="map" resultMap="boardResultMap">
+		SELECT b.b_no, b.b_title, b.b_hitcount, DATE_FORMAT(b.b_regdate,'%Y-%m-%d') b_regdate, b.m_id, r.r_count
+		FROM board b
+		LEFT JOIN (select r.b_no, count(r.b_no) r_count
+					from reply r
+					GROUP BY b_no) r
+		ON b.b_no = r.b_no
+		WHERE b_delYN = 0
+		<if test="word != null and word != ''">
+	        <choose>
+            <when test="key == 'id'">
+			AND b.m_id REGEXP #{word}
+            </when>
+            <when test="key == 'my'">
+			AND b.m_id like #{word}
+            </when>
+            <when test="key == 'title'">
+            AND b.b_title REGEXP #{word}
+            </when>
+            <when test="key == 'content'">
+            AND b.b_content REGEXP #{word}
+            </when>
+            <otherwise>
+            AND b.b_title REGEXP #{word}
+		    OR b.b_content REGEXP #{word}
+            </otherwise> 
+            </choose>
+		</if> 
+		ORDER BY b.b_no desc
+		LIMIT 10 OFFSET #{pagePerList}
+	</select>
+	
+	<select id="selectBoardArticle" parameterType="int" resultMap="boardResultMap">
+		SELECT b.b_no, b.b_title, b.b_content, b.b_hitcount, DATE_FORMAT(b.b_regdate,'%Y-%m-%d') b_regdate, b.m_id
+		FROM board b
+		WHERE b_no = #{bNo}
+	</select>
+	
+	<insert id="insertBoardArticle" parameterType="BoardVO">
+		INSERT INTO board (b_title, b_content, m_id)
+		VALUE(#{bTitle},#{bContent},#{mId})
+	</insert>
+	<update id="updateBoardArticle" parameterType="BoardVO">
+		UPDATE board
+		SET b_title = #{bTitle}, b_content = #{bContent}
+		WHERE b_no=#{bNo};
+	</update>
+	
+	<update id="deleteBoardArticle" parameterType="int">
+		UPDATE board
+		SET b_delYN = 1, b_deldate = NOW()
+		WHERE b_no = #{bNo};
+	</update>
+	
+	<update id="increaseHitcount" parameterType="int">
+		UPDATE board
+		SET b_hitcount = (b_hitcount+1)
+		WHERE b_no = #{bNo}
+	</update>
+	
+	
+</mapper>

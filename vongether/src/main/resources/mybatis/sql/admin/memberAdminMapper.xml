@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.vongether.admin.member.dao.MemberAdminDAO">
+
+	<resultMap id="memberResultMap" type="MemberVO">
+	  <id property="mId" column="m_id" />
+	  <result property="mName" column="m_name"/>
+	  <result property="mRole" column="m_role"/>
+	</resultMap>
+
+    <select id="loginAdmin" parameterType="MemberVO" resultMap="memberResultMap">
+        select m_id, m_role, m_name from member
+        where m_id = #{mId}
+        and m_pwd = #{mPwd}
+    </select>
+    
+
+</mapper>

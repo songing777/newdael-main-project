@@ -1,0 +1,7 @@
+@charset "UTF-8";
+
+.custom-header{
+    position: relative;
+    top: 50%;
+    margin-top: 130px;
+}

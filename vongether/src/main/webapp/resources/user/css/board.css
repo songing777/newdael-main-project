@@ -1,0 +1,104 @@
+@charset "UTF-8";
+
+
+.articleViewId {
+	border-left: 2px solid #b3b3b3; 
+	padding-left: 3px;
+}
+.articleViewRegdate{
+	font-size: 8px;
+	padding-right: 5px;
+	/* padding-top: 5px; */
+}
+.articleViewHitcount{
+	font-size: 12px;
+	padding-right: 5px;
+}
+.articleViewUpdateBtn{
+	font-size : 14px;
+}
+.articleViewRemoveBtn{
+	font-size : 14px;
+	margin-left : 3px;
+	padding-left : 3px;
+	border-left: 2px solid #b3b3b3; 
+}
+.articleViewTitleRightBox{
+	float : right;
+}
+.articleViewTitleBox{
+	margin-bottom : 10px;
+	padding: 5px;
+	
+	border-bottom: 2px solid #cccccc; 
+}
+.articleViewContentBox{
+	padding: 5px;
+	border-bottom: 2px solid #cccccc; 
+}
+.viewWriteBtn{
+	beckground-color: blue;
+	border-radius : 5px;
+}
+.writeBtnBox{
+	
+}
+.writeTitleBox{
+	border : 2px solid black;
+	padding : 3px 2px;
+}
+.writeContentBox{
+	width : 100%;
+	height : 500px;
+	border : 2px solid black;
+	padding : 3px 2px;
+}
+.articleViewReplyBox{
+	padding : 5px;
+}
+.boardArticleViewBox{
+	background:#e6e6e6;
+	color : black;
+	padding : 5px;
+}
+.articleReplyViewBox{
+ 	background-color : #b3b3b3;
+ 	border-bottom : 0px solid #d9d9d9;
+ 	margin-bottom : 4px; 
+}
+.articleReplyViewHeaderBox{
+	margin : 0px 5px ;
+	border-bottom : 2px solid #d9d9d9;
+	padding : 0px 5px 0px 5px;
+}
+.replyId{
+	font-size : 16px;
+}
+.replyRegdate{
+	font-size : 12px;
+	border-left : 2px solid #d9d9d9;
+	padding-left : 2px;
+}
+.replyContent{
+	padding : 15px;
+}
+.articleViewTitleRightBox2{
+}
+.replyViewCancleBtn{
+	border-left : 2px solid #d9d9d9;
+	padding-left : 3px;
+}
+.replyContentUpdate{
+	margin : 5px;
+}
+.replyViewRemoveBtn{
+	border-left : 2px solid #d9d9d9;
+	padding-left : 3px;
+	width : 100%;
+}
+.boardname{
+	margin-bottom : 10px;
+}
+.no{
+	width : 35px;
+}

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<mvc:annotation-driven>
+         <!-- argument resolver -->
+         <mvc:argument-resolvers>
+                  <beans:bean class="com.vongether.common.util.interceptor.AuthUserHandlerMethodArgumentResolver" />
+         </mvc:argument-resolvers>
+  </mvc:annotation-driven>
+
+	<mvc:default-servlet-handler/>
+
+	<context:component-scan base-package="com.vongether" />
+	
+	<mvc:annotation-driven>
+	    <mvc:message-converters>
+	      <beans:bean class="org.springframework.http.converter.StringHttpMessageConverter">
+	        <beans:property name="supportedMediaTypes">
+	          <beans:list>
+	            <beans:value>text/html; charset=UTF-8</beans:value>
+	            <beans:value>application/json; charset=UTF-8</beans:value>
+	          </beans:list>
+	        </beans:property>
+	      </beans:bean>
+	    </mvc:message-converters>
+  	</mvc:annotation-driven>
+	
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving 
+		up static resources in the ${webappRoot}/resources directory -->
+	<mvc:resources mapping="/resources/**" location="/resources/" />
+
+	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<beans:property name="defaultEncoding" value="UTF-8"></beans:property>
+		<beans:property name="maxUploadSize" value="5242880"></beans:property>
+		<beans:property name="maxInMemorySize" value="1048576"></beans:property>
+	</beans:bean>
+
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources 
+		in the /WEB-INF/views directory -->
+	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<beans:property name="suffix" value=".jsp" />
+		<beans:property name="order" value="2" />
+	</beans:bean>
+
+	<!-- Tiles -->
+	<beans:bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+		<beans:property name="definitions">
+			<beans:list>
+				<beans:value>/WEB-INF/tiles/tiles.xml</beans:value>
+			</beans:list>
+		</beans:property>
+	</beans:bean>
+	<beans:bean id="tilesViewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+		<beans:property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView" />
+		<beans:property name="order" value="1" />
+	</beans:bean>
+	
+	 
+	<mvc:interceptors>
+         <mvc:interceptor>
+                  <!-- 모든 경로에 대해 @Auth 어노테이션이 실행되도록 한다. -->
+                  <mvc:mapping path="/**" /> 
+                  <!-- defaultServlet이 처리하는 경로는 제외 -->
+                  <mvc:exclude-mapping path="/assets/**"/>
+                  <beans:bean class="com.vongether.common.util.interceptor.AuthInterceptor" />
+         </mvc:interceptor>
+  </mvc:interceptors>
+
+
+
+
+
+
+</beans:beans>
